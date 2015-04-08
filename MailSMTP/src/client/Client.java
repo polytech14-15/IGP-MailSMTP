@@ -20,20 +20,11 @@ public class Client {
         this.listDomain.put("toto.fr", "127.0.0.1:2009");
         this.destinataires = destinataires;
         this.infoDestination = new HashMap<String, ArrayList<String>>();
-    private final Map<String,String> listDomain;
-    private Map<String,ArrayList<String>> infoDestination;
-    
+    }
     private Socket socket_server;
     
     private String state;
     
-    public Client(){
-        //Initialise la liste des domaines connus par le client
-        this.listDomain = new HashMap<String,String>();
-        this.listDomain.put("toto.fr", "134.214.117.127:2009");
-        
-        this.infoDestination = new HashMap<String,ArrayList<String>>();
-    }
 
     private void getInfoDestination() {
         String[] tempAllDest = destinataires.split(";");
