@@ -11,12 +11,15 @@ package client;
  * @author p1305728
  */
 public class FrameClient extends javax.swing.JFrame {
+    
+    Client client;
 
     /**
      * Creates new form FrameClient
      */
     public FrameClient() {
         initComponents();
+        client = new Client();
     }
 
     /**
@@ -134,7 +137,7 @@ public class FrameClient extends javax.swing.JFrame {
 
     private void sendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendActionPerformed
         if(!textMail.getText().isEmpty() && !destinataire.getText().isEmpty()){
-            
+            client.start();
         }
     }//GEN-LAST:event_sendActionPerformed
 
