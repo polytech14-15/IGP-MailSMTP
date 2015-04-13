@@ -68,14 +68,12 @@ public class Client {
         {
             // Si la socket a ete initialise - donc server connu
             if (initSocket(entry.getKey())){
-                this.handleDialog(entry.getKey(),entry.getValue());
+                this.handleDialog(entry.getKey());
             }else{
-//              TODO
+              //TODO
 //              Ajout mess erreur : domain non connu
             }
         }
-  
-        
     }
     
     /**
@@ -101,15 +99,12 @@ public class Client {
         return bool;
     }
     
-    private void handleDialog(String domain, ArrayList<String> listDestinataire){
+    private void handleDialog(String domain){
         BufferedReader inFromServer = null;
         DataOutputStream outToServer = null;
         try {
             inFromServer = new BufferedReader(new InputStreamReader(this.socket_server.getInputStream()));
             outToServer = new DataOutputStream(this.socket_server.getOutputStream());
-            
-            //Nombre de destinataire sur le server
-            this.nbDest = listDestinataire.size();
             
             String messageFromServer;
             String messageForServer = null;
@@ -118,13 +113,13 @@ public class Client {
                 //Traitement selon l'etat du client
                 switch (this.state){
                     case ClientState.INIT:
-                        messageForServer = handleInit(messageFromServer,domain);
+                        messageForServer = handleInit(messageFromServer, domain);
                         break;
                     case ClientState.READY:
                         messageForServer = handleReady(messageFromServer);
                         break;
                     case ClientState.MAIL:
-                        messageForServer = handleMail(messageFromServer,domain);
+                        messageForServer = handleMail(messageFromServer, domain);
                         break;
                     case ClientState.RCPT:
                         messageForServer = handleRcpt(messageFromServer, domain);
