@@ -28,13 +28,13 @@ public class Client {
     private String state;
 
     public Client(String emetteur, String destinataires, String subject, String textMail) {
-        this.listDomain = new HashMap<String, String>();
+        this.listDomain = new HashMap<>();
         this.listDomain.put("toto.fr", "127.0.0.1:2009");
         this.emetteur = emetteur;
         this.destinataires = destinataires;
         this.subject = subject;
         this.textMail = textMail;
-        this.infoDestination = new HashMap<String, ArrayList<String>>();
+        this.infoDestination = new HashMap<>();
     }
     
     /**
@@ -74,6 +74,8 @@ public class Client {
 //              Ajout mess erreur : domain non connu
             }
         }
+        //TODO
+        //Afficher toutes les erreurs
     }
     
     /**
@@ -126,6 +128,7 @@ public class Client {
                         break;
                     case ClientState.DATA:
                         messageForServer = handleData(messageFromServer, outToServer);
+                        break;
                     case ClientState.QUIT:
                         handleQuit(messageFromServer);
                         break;
