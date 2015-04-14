@@ -182,6 +182,10 @@ public class Client {
     private String handleRcpt(String messageFromServer, String domain){
         String response = null;
         if (messageFromServer.startsWith("250") || messageFromServer.startsWith("550")){
+            if (messageFromServer.startsWith("550")){
+                //TODO
+                //MEssage: tel utilisateur existe pas
+            }
             this.nbDest--;
             if (this.nbDest > 0){
                 response = "RCPT TO:<"+this.infoDestination.get(domain).get(nbDest - 1)+">";
@@ -212,7 +216,7 @@ public class Client {
                 }
             }
             response = ".<CR><LF>";
-        } else if (messageFromServer.startsWith("250")){
+        } else if (messageFromServer.startsWith("250") || messageFromServer.startsWith("550")){
             response = "QUIT";
             this.state = ClientState.QUIT;
         }
