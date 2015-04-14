@@ -141,7 +141,7 @@ public class Client {
                         break;
                 }
                 //Si le message a envoye nest pas vide
-                if (messageForServer != null && !messageForServer.isEmpty()){
+                if (messageForServer != null && !messageForServer.isEmpty() && !this.state.equals(ClientState.CLOSED)){
                     System.out.println("C:"+messageForServer);
                     this.writeToServer(messageForServer, outToServer);
                 }
