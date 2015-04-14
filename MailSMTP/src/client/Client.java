@@ -2,11 +2,9 @@ package client;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -105,6 +103,10 @@ public class Client {
         }
     }
     
+    /**
+     * Handle the dialog between the client and the server
+     * @param domain - name of the server
+     */
     private void handleDialog(String domain){
         BufferedReader inFromServer = null;
         BufferedWriter outToServer = null;
@@ -159,6 +161,12 @@ public class Client {
         }
     }
     
+    /**
+     * Handle the client in its "INIT" state
+     * @param messageFromServer - message send by the server
+     * @param domain - name of the server
+     * @return message to send to the server
+     */
      private String handleInit(String messageFromServer, String domain){
         String response = null;
         if (messageFromServer.startsWith("220")){
@@ -168,6 +176,11 @@ public class Client {
         return response;
     }
      
+    /**
+    * Handle the client in its "READY" state
+    * @param messageFromServer - message send by the server
+    * @return message to send to the server
+    */
     private String handleReady(String messageFromServer){
         String response = null;
         if (messageFromServer.startsWith("250")){
@@ -176,7 +189,13 @@ public class Client {
         }
         return response;
     }
-      
+    
+    /**
+     * Handle the client in its "MAIL" state
+     * @param messageFromServer - message send by the server
+     * @param domain - name of the server
+     * @return message to send to the server
+     */
     private String handleMail(String messageFromServer, String domain){
         String response = null;
         if (messageFromServer.startsWith("250")){
@@ -186,7 +205,13 @@ public class Client {
         }
         return response;
     }
-      
+    
+    /**
+     * Handle the client in its "RCPT" state
+     * @param messageFromServer - message send by the server
+     * @param domain - name of the server
+     * @return message to send to the server
+     */
     private String handleRcpt(String messageFromServer, String domain){
         String response = null;
         if (messageFromServer.startsWith("250") || messageFromServer.startsWith("550")){
@@ -204,7 +229,14 @@ public class Client {
         }
         return response;
     }
-    
+
+    /**
+     * Handle the client in its "DATA" state
+     * @param messageFromServer - message send by the server
+     * @param outToServer - socket's writer
+     * @return the last message to send to the server
+     * @throws IOException 
+     */
     private String handleData(String messageFromServer, BufferedWriter outToServer) throws IOException{
         String response = null;
         if (messageFromServer.startsWith("354")){
@@ -231,12 +263,22 @@ public class Client {
         return response;
     }
     
+    /**
+     * Handle the client in its "DATA" state 
+     * @param messageFromServer - message send by the server
+     */
     private void handleQuit(String messageFromServer){
         if (messageFromServer.startsWith("221")){
            this.state = ClientState.CLOSED;
         }
     }
     
+    /**
+     * Write in the socket's writer
+     * @param s - message to write
+     * @param outToServer - socket's writer
+     * @throws IOException 
+     */
     private void writeToServer(String s, BufferedWriter outToServer) throws IOException{
         outToServer.write(s);
         outToServer.newLine();

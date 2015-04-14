@@ -87,12 +87,21 @@ public class ServerThread implements Runnable {
             }
         } 
     }
-    
+
+    /**
+     * Handle the server in its "INIT" state
+     * @return  message to send to the client
+     */
     private String handleInit (){
         this.state = ServerState.LIAISON_FERME;
         return "220 "+ ServerBis.DOMAIN + " SMT Server Ready";
     }
     
+    /**
+     * Handle the server in its "LIASON_FERME" state
+     * @param messageFromClient - message send by the client
+     * @return message to send to the client
+     */
     private String handleLiasonFerme (String messageFromClient){
         String response = null;
         if (messageFromClient.equals("HELO "+ServerBis.DOMAIN)){
@@ -102,6 +111,11 @@ public class ServerThread implements Runnable {
         return response;
     }
     
+    /**
+     * Handle the server in its "LIASON_OUVERTE" state
+     * @param messageFromClient - message send by the client
+     * @return message to send to the client
+     */
     private String handleLiasonOuverte (String messageFromClient){
         String response = null;
         if (messageFromClient.startsWith("MAIL FROM:")){
@@ -115,6 +129,11 @@ public class ServerThread implements Runnable {
         return response;
     }
     
+    /**
+     * Handle the server in its "TRANSACTION_DEST" state
+     * @param messageFromClient - message send by the client
+     * @return message to send to the client
+     */
     private String handleTransDest (String messageFromClient){
         String response = null;
         if (messageFromClient.startsWith("RCPT TO:")){
@@ -142,6 +161,11 @@ public class ServerThread implements Runnable {
         return response;
     }
     
+    /**
+     * Handle the server in its "TRANSACTION_DATA" state
+     * @param messageFromClient - message send by the client
+     * @return message to send to the client
+     */
     private String handleTransData(String messageFromClient){
         String response = null;
         if (messageFromClient.equals(".<CR><LF>")){
@@ -158,25 +182,37 @@ public class ServerThread implements Runnable {
         return response;
     }
     
+    /**
+     * Initialize buffer (clear the list "mail")
+     */
     private void initBuffer(){
         this.mail.clear();
     }
+    
+    /**
+     * Check if a user exist in the server 
+     * @param user - name of the user
+     * @return true if exists, false otherwise
+     */
     private boolean checkUser(String user){
         return ServerBis.USERS.contains(user);
     }
     
+    /**
+     * Save the mail on every necessary user's mailbox
+     */
     private void saveMail(){
         FileWriter fw;
         for (String user : this.users){
             try {
                 File f = new File("serverFile/" + user + "/MailBox.txt");
                 if(f.exists() && !f.isDirectory()) {
-                     fw = new FileWriter(f.getPath(),true);
-                for (String s : this.mail){
-                    fw.write(s);
-                    fw.write("\r\n"); // Saut de ligne
-                }
-                fw.close();
+                    fw = new FileWriter(f.getPath(),true);
+                    for (String s : this.mail){
+                        fw.write(s);
+                        fw.write("\r\n"); // Saut de ligne
+                    }
+                    fw.close();
                 }else {
                     System.out.println("File not found");
                 }
