@@ -29,7 +29,7 @@ public class Client {
 
     public Client(String emetteur, String destinataires, String subject, String textMail) {
         this.listDomain = new HashMap<>();
-        this.listDomain.put("toto.fr", "127.0.0.1:2009");
+        this.listDomain.put("toto.fr", "127.0.0.1:3333");
         this.emetteur = emetteur;
         this.destinataires = destinataires;
         this.subject = subject;
@@ -66,11 +66,12 @@ public class Client {
         // Pour chaque domaine trouvé
         for (Map.Entry<String, ArrayList<String>> entry : infoDestination.entrySet())
         {
-            // Si la socket a ete initialise - donc server connu
-            if (initSocket(entry.getKey())){
+            // Si domain connu
+            if (this.listDomain.containsKey(entry.getKey())){
+                this.initSocket(entry.getKey());
                 this.handleDialog(entry.getKey());
-            }else{
-              //TODO
+            } else {
+                 //TODO
 //              Ajout mess erreur : domain non connu
             }
         }
@@ -82,9 +83,9 @@ public class Client {
      * Recupere et creer la connexion avec le serveur a contacter
      * @param domain - Nom du domaine a contacter
      */
-    private boolean initSocket(String domain){
+    private void initSocket(String domain){
         String infos = this.listDomain.get(domain);
-        boolean bool = false;
+        
         // Si le domain est connu
         if (infos != null){
             String ip = infos.split(":")[0];
@@ -93,12 +94,10 @@ public class Client {
             try {
                 this.socket_server = new Socket(ip, port);
                 this.state = ClientState.INIT;
-                bool = true;
             } catch (IOException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        return bool;
     }
     
     private void handleDialog(String domain){
