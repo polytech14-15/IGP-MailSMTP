@@ -152,7 +152,7 @@ public class Client {
     }
     
      private String handleInit(String messageFromServer, String domain){
-        String response ="";
+        String response = null;
         if (messageFromServer.startsWith("220")){
             response = "HELO "+domain;
             this.state = ClientState.READY;
@@ -161,7 +161,7 @@ public class Client {
     }
      
     private String handleReady(String messageFromServer){
-        String response ="";
+        String response = null;
         if (messageFromServer.startsWith("250")){
             response = "MAIL FROM:<"+this.emetteur+">";
             this.state = ClientState.MAIL;
@@ -170,7 +170,7 @@ public class Client {
     }
       
     private String handleMail(String messageFromServer, String domain){
-        String response = "";
+        String response = null;
         if (messageFromServer.startsWith("250")){
             this.nbDest = this.infoDestination.get(domain).size();
             response = "RCPT TO:<"+this.infoDestination.get(domain).get(nbDest - 1)+">";
@@ -180,7 +180,7 @@ public class Client {
     }
       
     private String handleRcpt(String messageFromServer, String domain){
-        String response = "";
+        String response = null;
         if (messageFromServer.startsWith("250") || messageFromServer.startsWith("550")){
             this.nbDest--;
             if (this.nbDest > 0){
@@ -194,7 +194,7 @@ public class Client {
     }
     
     private String handleData(String messageFromServer, DataOutputStream outToServer) throws IOException{
-        String response = "";
+        String response = null;
         if (messageFromServer.startsWith("354")){
             //Header
             outToServer.writeBytes("From: "+this.emetteur+"<CR><LF>");
