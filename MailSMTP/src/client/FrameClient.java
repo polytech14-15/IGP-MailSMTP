@@ -47,7 +47,7 @@ public class FrameClient extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        destinataire.setText("test@toto.fr");
+        destinataire.setText("john@toto.fr");
         destinataire.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 destinataireActionPerformed(evt);
@@ -58,6 +58,7 @@ public class FrameClient extends javax.swing.JFrame {
 
         textMail.setColumns(20);
         textMail.setRows(5);
+        textMail.setText("test\nfinger crossed\n");
         mail.setViewportView(textMail);
 
         jLabel2.setText("Message :");
@@ -87,6 +88,7 @@ public class FrameClient extends javax.swing.JFrame {
 
         jLabel5.setText("Objet :");
 
+        subject.setText("coucou");
         subject.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 subjectActionPerformed(evt);

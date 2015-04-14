@@ -1,9 +1,12 @@
 package client;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,6 +76,7 @@ public class Client {
             } else {
                  //TODO
 //              Ajout mess erreur : domain non connu
+                System.out.println("Domain not found");
             }
         }
         //TODO
@@ -94,6 +98,7 @@ public class Client {
             try {
                 this.socket_server = new Socket(ip, port);
                 this.state = ClientState.INIT;
+                System.out.println("New connection with server ("+ip+":"+port+")");
             } catch (IOException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -102,15 +107,16 @@ public class Client {
     
     private void handleDialog(String domain){
         BufferedReader inFromServer = null;
-        DataOutputStream outToServer = null;
+        BufferedWriter outToServer = null;
+        
         try {
             inFromServer = new BufferedReader(new InputStreamReader(this.socket_server.getInputStream()));
-            outToServer = new DataOutputStream(this.socket_server.getOutputStream());
-            
+            outToServer = new BufferedWriter(new OutputStreamWriter(this.socket_server.getOutputStream()));
             String messageFromServer;
             String messageForServer = null;
             while (!this.state.equals(ClientState.CLOSED)){
                 messageFromServer = inFromServer.readLine();
+                System.out.println("S:"+messageFromServer);
                 //Traitement selon l'etat du client
                 switch (this.state){
                     case ClientState.INIT:
@@ -134,7 +140,8 @@ public class Client {
                 }
                 //Si le message a envoye nest pas vide
                 if (messageForServer != null && !messageForServer.isEmpty()){
-                    outToServer.writeBytes(messageForServer);
+                    System.out.println("C:"+messageForServer);
+                    this.writeToServer(messageForServer, outToServer);
                 }
             }
         } catch (IOException ex) {
@@ -145,6 +152,7 @@ public class Client {
                 if (inFromServer != null) inFromServer.close();
                 if (outToServer!= null) outToServer.close();
                 this.socket_server.close();
+                System.out.println("Connection terminated");
             } catch (IOException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -173,7 +181,7 @@ public class Client {
         String response = null;
         if (messageFromServer.startsWith("250")){
             this.nbDest = this.infoDestination.get(domain).size();
-            response = "RCPT TO:<"+this.infoDestination.get(domain).get(nbDest - 1)+">";
+            response = "RCPT TO:<" + this.infoDestination.get(domain).get(nbDest - 1) + "@" + domain + ">";
             this.state = ClientState.RCPT;
         }
         return response;
@@ -197,22 +205,22 @@ public class Client {
         return response;
     }
     
-    private String handleData(String messageFromServer, DataOutputStream outToServer) throws IOException{
+    private String handleData(String messageFromServer, BufferedWriter outToServer) throws IOException{
         String response = null;
         if (messageFromServer.startsWith("354")){
             //Header
-            outToServer.writeBytes("From: "+this.emetteur+"<CR><LF>");
-            outToServer.writeBytes("To: "+this.destinataires+"<CR><LF>");
-            outToServer.writeBytes("Subject: "+this.subject+"<CR><LF>");
-            outToServer.writeBytes("<CR><LF>");
+            this.writeToServer("From: "+this.emetteur+"<CR><LF>", outToServer);
+            this.writeToServer("To: "+this.destinataires+"<CR><LF>", outToServer);
+            this.writeToServer("Subject: "+this.subject+"<CR><LF>", outToServer);
+            this.writeToServer("<CR><LF>", outToServer);
             
             //Corps
             String[] lines = this.textMail.split("\n");
             for (String s : lines){
                 if (!s.equals(".")){
-                    outToServer.writeBytes(s+"<CR><LF>");
+                    this.writeToServer(s+"<CR><LF>", outToServer);
                 } else {
-                    outToServer.writeBytes("<CR><LF>");
+                    this.writeToServer("<CR><LF>", outToServer);
                 }
             }
             response = ".<CR><LF>";
@@ -227,5 +235,11 @@ public class Client {
         if (messageFromServer.startsWith("221")){
            this.state = ClientState.CLOSED;
         }
+    }
+    
+    private void writeToServer(String s, BufferedWriter outToServer) throws IOException{
+        outToServer.write(s);
+        outToServer.newLine();
+        outToServer.flush();
     }
 }

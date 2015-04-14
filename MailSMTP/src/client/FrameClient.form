@@ -102,7 +102,7 @@
   <SubComponents>
     <Component class="javax.swing.JTextField" name="destinataire">
       <Properties>
-        <Property name="text" type="java.lang.String" value="test@toto.fr"/>
+        <Property name="text" type="java.lang.String" value="john@toto.fr"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="destinataireActionPerformed"/>
@@ -124,6 +124,7 @@
           <Properties>
             <Property name="columns" type="int" value="20"/>
             <Property name="rows" type="int" value="5"/>
+            <Property name="text" type="java.lang.String" value="test&#xa;finger crossed&#xa;"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -186,6 +187,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="subject">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="coucou"/>
+      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="subjectActionPerformed"/>
       </Events>
