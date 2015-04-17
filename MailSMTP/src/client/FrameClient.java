@@ -19,6 +19,7 @@ public class FrameClient extends javax.swing.JFrame {
      */
     public FrameClient() {
         initComponents();
+        this.infos.setText("");
         this.setTitle("SMTP Client");
     }
 
@@ -39,7 +40,7 @@ public class FrameClient extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         send = new javax.swing.JButton();
         reset = new javax.swing.JButton();
-        errorMail = new javax.swing.JLabel();
+        infos = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         emetteur = new javax.swing.JComboBox();
         jLabel5 = new javax.swing.JLabel();
@@ -80,7 +81,8 @@ public class FrameClient extends javax.swing.JFrame {
             }
         });
 
-        errorMail.setText("Hello!");
+        infos.setText("Hello!");
+        infos.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         jLabel4.setText("De :");
 
@@ -99,10 +101,19 @@ public class FrameClient extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(reset)
+                .addGap(245, 245, 245))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addGap(225, 225, 225))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(57, 57, 57)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(infos, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(96, 96, 96)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel4)
@@ -115,16 +126,7 @@ public class FrameClient extends javax.swing.JFrame {
                             .addComponent(emetteur, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(subject, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
-                        .addComponent(send))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(263, 263, 263)
-                        .addComponent(errorMail))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(245, 245, 245)
-                        .addComponent(reset))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(226, 226, 226)
-                        .addComponent(jLabel3)))
+                        .addComponent(send)))
                 .addContainerGap(57, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -153,9 +155,9 @@ public class FrameClient extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(mail, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
-                .addComponent(errorMail)
-                .addGap(37, 37, 37))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(infos, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -169,6 +171,16 @@ public class FrameClient extends javax.swing.JFrame {
         if(!textMail.getText().isEmpty() && !destinataire.getText().isEmpty()){
             client = new Client(emetteur.getSelectedItem().toString(), destinataire.getText(), subject.getText(), textMail.getText());
             client.start();
+            
+            // Displays info to the client
+            if (!this.client.getReturnInfos().isEmpty()){
+                String str = "<html>";
+                for (String s : this.client.getReturnInfos()){
+                    str += s + "<br>";
+                }
+                str += "</html>";
+                this.infos.setText(str);
+            }
         }
     }//GEN-LAST:event_sendActionPerformed
 
@@ -177,6 +189,7 @@ public class FrameClient extends javax.swing.JFrame {
        this.destinataire.setText("");
        this.subject.setText("");
        this.textMail.setText("");
+       this.infos.setText("");
     }//GEN-LAST:event_resetActionPerformed
 
     private void subjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subjectActionPerformed
@@ -221,7 +234,7 @@ public class FrameClient extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField destinataire;
     private javax.swing.JComboBox emetteur;
-    private javax.swing.JLabel errorMail;
+    private javax.swing.JLabel infos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

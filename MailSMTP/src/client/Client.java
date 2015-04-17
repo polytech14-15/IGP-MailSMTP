@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,12 +16,17 @@ import java.util.logging.Logger;
 public class Client {
     
     //Liste des domaines connus par le serveur
-    private final Map<String, String> listDomain;
+    private final Map<String, String> listDomain = new HashMap<String, String>(){
+        {
+            put("toto.fr","127.0.0.1:3333");
+        }
+    };
     
     private String emetteur;
     private String destinataires;
     private String subject;
     private String textMail;
+    private List<String> returnInfos; // Infos to display to the client
     private Map<String, ArrayList<String>> infoDestination;
     private int nbDest;
     
@@ -29,13 +35,20 @@ public class Client {
     private String state;
 
     public Client(String emetteur, String destinataires, String subject, String textMail) {
-        this.listDomain = new HashMap<>();
-        this.listDomain.put("toto.fr", "127.0.0.1:3333");
         this.emetteur = emetteur;
         this.destinataires = destinataires;
         this.subject = subject;
         this.textMail = textMail;
+        this.returnInfos = new ArrayList<>();
         this.infoDestination = new HashMap<>();
+    }
+    
+    /**
+     * Getter of returnInfos
+     * @return returnInfos
+     */
+    public List<String> getReturnInfos(){
+        return this.returnInfos;
     }
     
     /**
@@ -72,13 +85,14 @@ public class Client {
                 this.initSocket(entry.getKey());
                 this.handleDialog(entry.getKey());
             } else {
-                 //TODO
-//              Ajout mess erreur : domain non connu
+                this.returnInfos.add("Le message n'a pas été envoyé aux adresses sur le domaine '" + entry.getKey() + "' (domaine inconnu).");
                 System.out.println("Domain not found");
             }
         }
-        //TODO
-        //Afficher toutes les erreurs
+        // If there is not a single error
+        if (this.returnInfos.isEmpty()){
+            this.returnInfos.add("Le message a bien été envoyé à tous les destinataires.");
+        }
     }
     
     /**
@@ -216,12 +230,11 @@ public class Client {
         String response = null;
         if (messageFromServer.startsWith("250") || messageFromServer.startsWith("550")){
             if (messageFromServer.startsWith("550")){
-                //TODO
-                //MEssage: tel utilisateur existe pas
+                this.returnInfos.add("Le message n'a pas été envoyé à '" + this.infoDestination.get(domain).get(nbDest - 1) + "@" + domain +"' (utilisateur inconnu).");
             }
             this.nbDest--;
             if (this.nbDest > 0){
-                response = "RCPT TO:<"+this.infoDestination.get(domain).get(nbDest - 1)+">";
+                response = "RCPT TO:<" + this.infoDestination.get(domain).get(nbDest - 1) + ">";
             } else {
                 response = "DATA";
                 this.state = ClientState.DATA;
