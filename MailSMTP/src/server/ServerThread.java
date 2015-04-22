@@ -205,7 +205,14 @@ public class ServerThread implements Runnable {
         FileWriter fw;
         for (String user : this.users){
             try {
+                File folder = new File("serverFile/" + user );
+                if(!folder.exists()){
+                    folder.mkdirs();
+                }
                 File f = new File("serverFile/" + user + "/MailBox.txt");
+                if(!f.exists()){
+                    f.createNewFile();
+                }
                 if(f.exists() && !f.isDirectory()) {
                     fw = new FileWriter(f.getPath(),true);
                     for (String s : this.mail){
@@ -214,8 +221,7 @@ public class ServerThread implements Runnable {
                     }
                     fw.close();
                 }else {
-                    System.out.println("File not found");
-                }
+                    System.out.println("File not found");                }
             } catch (IOException ex) {
                 Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
             }

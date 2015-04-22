@@ -1,12 +1,5 @@
 From: asterix@test.fr<CR><LF>
-To: john@toto.fr;mike@toto.fr<CR><LF>
-Subject: coucou<CR><LF>
-<CR><LF>
-test<CR><LF>
-finger crossed<CR><LF>
-.<CR><LF>
-From: asterix@test.fr<CR><LF>
-To: johfn@toto.fr;mike@toto.fr<CR><LF>
+To: mike@toto.fr;titi@toto.fr<CR><LF>
 Subject: coucou<CR><LF>
 <CR><LF>
 test<CR><LF>
