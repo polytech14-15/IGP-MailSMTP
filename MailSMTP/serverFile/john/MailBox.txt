@@ -5,3 +5,37 @@ Subject: coucou<CR><LF>
 test<CR><LF>
 finger crossed<CR><LF>
 .<CR><LF>
+From: asterix@test.fr<CR><LF>
+To: john@toto.fr<CR><LF>
+Subject: coucou<CR><LF>
+<CR><LF>
+test<CR><LF>
+finger crossed<CR><LF>
+.<CR><LF>
+From: achille@test.fr<CR><LF>
+To: john@toto.fr<CR><LF>
+Subject: coucou<CR><LF>
+<CR><LF>
+rtfwsetf<CR><LF>
+.<CR><LF>
+From: asterix@test.fr<CR><LF>
+To: john@toto.fr;eres@toto.fr<CR><LF>
+Subject: coucou<CR><LF>
+<CR><LF>
+test<CR><LF>
+finger crossed<CR><LF>
+.<CR><LF>
+From: asterix@test.fr<CR><LF>
+To: john@toto.fr;eres@tsdrtgsr.fr<CR><LF>
+Subject: coucou<CR><LF>
+<CR><LF>
+test<CR><LF>
+finger crossed<CR><LF>
+.<CR><LF>
+From: asterix@test.fr<CR><LF>
+To: john@toto.fr;mike@tata.fr<CR><LF>
+Subject: coucou<CR><LF>
+<CR><LF>
+test<CR><LF>
+finger crossed<CR><LF>
+.<CR><LF>

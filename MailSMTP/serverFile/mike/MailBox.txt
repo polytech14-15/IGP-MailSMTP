@@ -5,3 +5,9 @@ Subject: coucou<CR><LF>
 test<CR><LF>
 finger crossed<CR><LF>
 .<CR><LF>
+From: asterix@test.fr<CR><LF>
+To: john@tete.fr;mike@toto.fr<CR><LF>
+Subject: coucou2<CR><LF>
+<CR><LF>
+seurfgsekujgu<CR><LF>
+.<CR><LF>
